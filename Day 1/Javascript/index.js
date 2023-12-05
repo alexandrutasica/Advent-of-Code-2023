@@ -12,45 +12,32 @@ const input = fs.readFileSync(filePath, "utf8", (err, data) => {
 const linesArray = input.split("\n");
 
 function processData(data) {
-  const validNeedle = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-  ];
+  const mappingText = {
+    zero: "zero0zero",
+    one: "one1one",
+    two: "two2two",
+    three: "three3three",
+    four: "four4four",
+    five: "five5five",
+    six: "six6six",
+    seven: "seven7seven",
+    eight: "eight8eight",
+    nine: "nine9nine",
+  };
   return data.reduce(function (agg, element) {
-    // One start pointer
-    // One end pointer
-    // Move them together until they find first and last number
+    // Get regex data
     // Add them together
     // Add all of them
-    let start = null;
-    let end = null;
-    for (let i = 0; i < element.length && start == null; i++) {
-      if (Number.isInteger(parseInt(element[i], 10))) {
-        start = element[i];
-      }
-    }
-    for (let i = element.length - 1; i > -1 && end == null; i--) {
-      if (Number.isInteger(parseInt(element[i], 10))) {
-        end = element[i];
-      }
-    }
+    let line = element;
+    Object.keys(mappingText).forEach((key) => {
+      line = line.replaceAll(key, mappingText[key]);
+    });
+    const regExParse = line.match(/\d/g);
+    const start = mappingText[regExParse[0]] || regExParse[0];
+    const end =
+      mappingText[regExParse[regExParse.length - 1]] ||
+      regExParse[regExParse.length - 1];
+    console.log(line, start, end, parseInt(start + end, 10));
     return agg + parseInt(start + end, 10);
   }, 0);
 }

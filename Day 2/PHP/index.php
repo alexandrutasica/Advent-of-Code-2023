@@ -35,5 +35,30 @@ function mapValidGames(array $lines) {
   return $validGames;
 }
 
-$validGames = mapValidGames($lines);
-echo "Sum of valid games: ".array_sum($validGames);
+function getFewerCubes(array $lines) {
+  $result = [];
+  foreach($lines as $line) {
+    $lineSplitted = explode(":", $line);
+    $rounds = explode("; ", trim($lineSplitted[1]));
+    $maxOfEachRound = [
+      "red" => 0,
+      "green" => 0,
+      "blue" => 0,
+    ];
+    foreach ($rounds as $round) {
+      $roundMoves = explode(",", $round);
+      foreach($roundMoves as $move) {
+        $move = explode(" ", trim($move));
+        if ($move[0] > $maxOfEachRound[$move[1]]) {
+          $maxOfEachRound[$move[1]] = (int) $move[0];
+        }
+      }
+    }
+
+    $result[] = $maxOfEachRound["red"] * $maxOfEachRound["green"] * $maxOfEachRound["blue"];
+  }
+  return $result;
+}
+
+echo "Sum of valid games: ".array_sum(mapValidGames($lines));
+echo "Game sum: ".array_sum(getFewerCubes($lines));

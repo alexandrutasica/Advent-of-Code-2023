@@ -44,9 +44,38 @@ function mapValidGames(lines) {
   return validGames;
 }
 
+function getFewerCubes(lines) {
+  const result = [];
+  lines.forEach((element) => {
+    const lineSplitted = element.split(":");
+    const rounds = lineSplitted[1].trim().split("; ");
+    let maxOfEachGame = {
+      red: 0,
+      green: 0,
+      blue: 0,
+    };
+    for (let i = 0; i < rounds.length; i++) {
+      const roundMoves = rounds[i].split(", ");
+      for (let moveIndex = 0; moveIndex < roundMoves.length; moveIndex++) {
+        const move = roundMoves[moveIndex].split(" ");
+        if (move[0] > maxOfEachGame[move[1]]) {
+          maxOfEachGame[move[1]] = parseInt(move[0], 10);
+        }
+      }
+    }
+
+    result.push(
+      maxOfEachGame["red"] * maxOfEachGame["green"] * maxOfEachGame["blue"]
+    );
+  });
+  return result;
+}
+
 console.log(
   "Sum of valid games: ",
   mapValidGames(linesArray).reduce((acc, item) => acc + item, 0)
 );
-
-console.log(mapValidGames(linesArray));
+console.log(
+  "Games Sum: ",
+  getFewerCubes(linesArray).reduce((acc, item) => acc + item, 0)
+);

@@ -38,7 +38,7 @@ function mapValidGames(lines) {
       }
     }
     if (gameValid) {
-      validGames.push(gameNumber);
+      validGames.push(parseInt(gameNumber, 10));
     }
   });
   return validGames;
@@ -46,7 +46,7 @@ function mapValidGames(lines) {
 
 console.log(
   "Sum of valid games: ",
-  mapValidGames(linesArray).reduce((acc, item) => acc + parseInt(item, 10), 0)
+  mapValidGames(linesArray).reduce((acc, item) => acc + item, 0)
 );
 
 console.log(mapValidGames(linesArray));

@@ -24,10 +24,8 @@ function solution(data) {
     const myNumbers = splittedData[1].split(" ").filter(item => item.trim().length > 0);
     const winningNumber = splittedData[0].split(": ")[1].split(" ").filter(item => item.trim().length > 0);
     let winningNumbersTotal = 0;
-    let list = [];
     for (let numberIndex = 0; numberIndex < myNumbers.length; numberIndex++) {
       if (winningNumber.includes(myNumbers[numberIndex])) {
-        list.push(myNumbers[numberIndex]);
         winningNumbersTotal += 1;
       }
     }

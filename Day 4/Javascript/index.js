@@ -21,8 +21,13 @@ function solution(data) {
   let total = 0;
   for (let lineIndex = 0; lineIndex < data.length; lineIndex++) {
     const splittedData = data[lineIndex].split(" | ");
-    const myNumbers = splittedData[1].split(" ").filter(item => item.trim().length > 0);
-    const winningNumber = splittedData[0].split(": ")[1].split(" ").filter(item => item.trim().length > 0);
+    const myNumbers = splittedData[1]
+      .split(" ")
+      .filter((item) => item.trim().length > 0);
+    const winningNumber = splittedData[0]
+      .split(": ")[1]
+      .split(" ")
+      .filter((item) => item.trim().length > 0);
     let winningNumbersTotal = 0;
     for (let numberIndex = 0; numberIndex < myNumbers.length; numberIndex++) {
       if (winningNumber.includes(myNumbers[numberIndex])) {
@@ -36,4 +41,44 @@ function solution(data) {
   return total;
 }
 
+/*
+There's no such thing as "points". Instead, scratchcards only cause you to win more scratchcards equal to the number of winning numbers you have.
+
+Specifically, you win copies of the scratchcards below the winning card equal to the number of matches. So, if card 10 were to have 5 matching numbers, you would win one copy each of cards 11, 12, 13, 14, and 15.
+
+Copies of scratchcards are scored like normal scratchcards and have the same card number as the card they copied. So, if you win a copy of card 10 and it has 5 matching numbers, it would then win a copy of the same cards that the original card 10 won: cards 11, 12, 13, 14, and 15. This process repeats until none of the copies cause you to win any more cards. (Cards will never make you copy a card past the end of the table.)
+*/
+const originalData = linesArray;
+function solutionPart2(data) {
+  let total = data.length;
+  for (let lineIndex = 0; lineIndex < data.length; lineIndex++) {
+    const splittedData = data[lineIndex].split(" | ");
+    const myNumbers = splittedData[1]
+      .split(" ")
+      .filter((item) => item.trim().length > 0);
+    const winningNumber = splittedData[0]
+      .split(": ")[1]
+      .split(" ")
+      .filter((item) => item.trim().length > 0);
+    const currGame = parseInt(splittedData[0].split(":")[0].replace("Card ", "").trim(), 10);
+    const wonCards = [];
+    let currentWonIndex = currGame; // Number of the current game + 1. The currGame index starts from 1, even if the first arr line number is 0
+    for (
+      let numberIndex = 0;
+      numberIndex < myNumbers.length && currentWonIndex < originalData.length;
+      numberIndex++
+    ) {
+      if (winningNumber.includes(myNumbers[numberIndex])) {
+        wonCards.push(originalData[currentWonIndex]);
+        currentWonIndex += 1;
+      }
+    }
+    if (wonCards.length > 0) {
+      total += solutionPart2(wonCards);
+    }
+  }
+  return total;
+}
+
 console.log("part 1: ", solution(linesArray));
+console.log("part 2: ", solutionPart2(linesArray));

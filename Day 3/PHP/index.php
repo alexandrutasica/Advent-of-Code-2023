@@ -63,4 +63,54 @@ function solution(array $data) {
   return $sum;
 }
 
-echo 'part 1 sum: ' . solution($lines);
+function solutionPart2GearRatio(array $data) {
+  global $directionToCheck;
+
+  $starPosition = [];
+  $sum = 0;
+  for ($rowIndex=0; $rowIndex < count($data); $rowIndex++) { 
+    $row = $data[$rowIndex] . ".";
+    $num = '';
+    $starPos = '-1,-1';
+    for($colIndex=0; $colIndex < strlen($row); $colIndex++) {
+      $col = $row[$colIndex];
+      if (isNumber($col)) {
+        $num = $num . $col;
+        for($directionIndex=0; $directionIndex < count($directionToCheck); $directionIndex++) {
+          $direction = $directionToCheck[$directionIndex];
+          $directionRow = $rowIndex + $direction[0];
+          $directionCol = $colIndex + $direction[1];
+          if (($directionRow >= 0 || $directionRow < count($data)) && ($directionCol >= 0 || $directionCol < strlen($row))) {
+            $valToCheck = substr($data[$directionRow], $directionCol, 1);
+            if ($valToCheck && $valToCheck == '*') {
+              $starPos = $directionRow.','.$directionCol;
+            }
+          }
+        }
+      } else {
+        if ($num != '' && $starPos != '-1,-1') {
+          if ($starPosition[$starPos]) {
+            $starPosition[$starPos][] = (int) $num;
+          } else {
+            $starPosition[$starPos] = [(int) $num];
+          }
+        }
+        $num = '';
+        $starPos = '-1,-1';
+      }
+    }
+  }
+  foreach ($starPosition as $key => $value) {
+    if (count($value) > 1) {
+      $prodInside = 1;
+      for ($i=0; $i < count($value); $i++) { 
+        $prodInside *= $value[$i];
+      }
+      $sum += $prodInside;
+    }
+  }
+  return $sum;
+}
+
+echo 'part 1 sum: ' . solution($lines) . "\n";
+echo 'part 2 sum: ' . solutionPart2GearRatio($lines) . "\n";

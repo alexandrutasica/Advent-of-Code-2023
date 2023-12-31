@@ -205,4 +205,28 @@ function solution(data) {
   return minLocation;
 }
 
+//  solution: 31161857
+function solutionPart2(data) {
+  mapDataToArrays(data);
+
+  let minLocation = Number.POSITIVE_INFINITY;
+  for(let i=0;i<seeds.length;i+=2) {
+    for(let seedIndex = parseInt(seeds[i], 10); seedIndex < parseInt(seeds[i], 10) + parseInt(seeds[i+1], 10); seedIndex++ ) {
+      const soil = getSourceToDestination(seedToSoil, seedIndex);
+      const fertilizer = getSourceToDestination(soilToFertilizer, soil);
+      const water = getSourceToDestination(fertilizerToWater, fertilizer);
+      const light = getSourceToDestination(waterToLight, water);
+      const temperature = getSourceToDestination(lightToTemperature, light);
+      const humidity = getSourceToDestination(temperatureToHumidity, temperature);
+      const location = getSourceToDestination(humidityToLocation, humidity);
+  
+      if (location < minLocation) {
+        minLocation = location;
+      }
+    }
+  }
+  return minLocation;
+}
+
 console.log("part 1: ", solution(linesArray));
+console.log("part 2: ", solutionPart2(linesArray));

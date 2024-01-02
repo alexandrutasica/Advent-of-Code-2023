@@ -1,5 +1,6 @@
 <?php
-// error_reporting(0);
+error_reporting(0);
+set_time_limit(0); // Let the script run for how many years it needs
 
 /*
 Consider again the example seed-to-soil map:
@@ -164,4 +165,29 @@ function solution($data) {
   return $minLocation;
 }
 
+function solutionPart2($data) {
+  global $seeds, $seedToSoil, $soilToFertilizer, $fertilizerToWater, $waterToLight, $lightToTemperature, $temperatureToHumidity, $humidityToLocation;
+
+  mapToArray($data);
+
+  $minLocation = INF;
+  for($i=0;$i<count($seeds);$i+=2){
+    for($seedIndex = ((int) $seeds[$i]); $seedIndex < (((int) $seeds[$i]) + ((int) $seeds[$i+1])); $seedIndex++) {
+      $soil = getSourceToDestination($seedToSoil, $seedIndex);
+      $fertilizer = getSourceToDestination($soilToFertilizer, $soil);
+      $water = getSourceToDestination($fertilizerToWater, $fertilizer);
+      $light = getSourceToDestination($waterToLight, $water);
+      $temperature = getSourceToDestination($lightToTemperature, $light);
+      $humidity = getSourceToDestination($temperatureToHumidity, $temperature);
+      $location = getSourceToDestination($humidityToLocation, $humidity);
+
+      if ($location < $minLocation) {
+        $minLocation = $location;
+      }
+    }
+  }
+  return $minLocation;
+}
+
 echo 'Part 1: ' . solution($lines) . "\n";
+echo 'Part 2: ' . solutionPart2($lines) . "\n";

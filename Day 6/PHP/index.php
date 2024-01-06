@@ -73,5 +73,33 @@ function solution() {
   return array_reduce($times, fn($acc, $val) => $acc * $val, 1);
 }
 
+/*
+There's really only one race - ignore the spaces between the numbers on each line.
+Time:      71530
+Distance:  940200
+Now, you have to figure out how many ways there are to win this single race.
+
+solution: 35150181
+*/
+function solutionPart2() {
+  global $time, $distance;
+
+  $times = 0;
+  $timeVal = array_reduce($time, fn($acc, $val) => $acc . $val, "");
+  $distanceVal = array_reduce($distance, fn($acc, $val) => $acc . $val, "");
+  for($left = ceil($timeVal / 2); ($timeVal - $left) * $left > $distanceVal; $left--) {
+    if (($timeVal - $left) * $left > $distanceVal) {
+      $times++;
+    }
+  }
+  for($right = ceil($timeVal / 2)+1; ($timeVal - $right) * $right > $distanceVal; $right++) {
+    if (($timeVal - $right) * $right > $distanceVal) {
+      $times++;
+    }
+  }
+  return $times;
+}
+
 processData($lines);
 echo 'Part 1: ' . solution($lines) . "\n";
+echo 'Part 2: ' . solutionPart2($lines) . "\n";

@@ -52,5 +52,31 @@ function solution() {
   return times.reduce((acc, val) => acc * val, 1);
 }
 
+/*
+There's really only one race - ignore the spaces between the numbers on each line.
+Time:      71530
+Distance:  940200
+Now, you have to figure out how many ways there are to win this single race.
+
+solution: 35150181
+*/
+function solutionPart2() {
+  let times = 0;
+  const timeVal = time.reduce((acc, item) => `${acc}${item}`, "");
+  const distanceVal = distance.reduce((acc, item) => `${acc}${item}`, "");
+  for (let left = Math.ceil(timeVal / 2); (timeVal - left) * left > distanceVal && left > 0; left--) {
+    if ((timeVal - left) * left > distanceVal ) {
+      times++;
+    }
+  }
+  for (let right = Math.ceil(timeVal / 2) + 1; (timeVal - right) * right > distanceVal && right <= timeVal; right++) {
+    if ((timeVal - right) * right > distanceVal ) {
+      times++;
+    }
+  }
+  return times;
+}
+
 processData(linesArray);
 console.log("part 1: ", solution());
+console.log("part 2: ", solutionPart2());
